@@ -51,7 +51,7 @@ WP_USER_LOGIN=user
 WP_USER_EMAIL=user@user.fr
 ```
 
-Those variables are used during containers setup scripts and variables ***shouldn't*** be changed.
+Those variables are used during containers setup scripts.
 
 ### 4. Define secrets variables
 
@@ -65,7 +65,7 @@ echo "egache" > secrets/wp_admin_password.txt
 echo "user" > secrets/wp_user_password.txt
 ```
 
-These passwords are used during containers setup scripts, are strictly personal and ***shouldn't*** be changed
+These passwords are used during containers setup scripts, are strictly personal.
 
 ## Build and launch the project
 
@@ -88,7 +88,7 @@ Monitor the containers startup and allow to check for any errors.
 ```bash
 docker exec -it <container_name> sh
 ```
-Open a shell inside the isolated container to manually check if configuration files, permissions, or secrets are correctly setted-up.
+Open a shell inside the isolated container.
 
 #### Inspect Docker objects
 ```bash
@@ -105,7 +105,6 @@ Executes `docker compose down -v && docker system prune -a`. It stops the contai
 
 ## Data persistence and storage
 
-By design, Docker containers are ephemeral. If a container is destroyed, its internal data is lost. To prevent this, data is stored on the host machine.
 Datas inside docker containers are losts once the container is destroyed. To prevent this, datas are stored on the host machine to ensure data persistence. 
 *   **Database:** MariaDB data is located at `/home/egache/data/db-data`
 *   **Website:** WordPress files are located at `/home/egache/data/wp-data`

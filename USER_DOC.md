@@ -4,10 +4,10 @@
 
 This documentation assume that you've got a correctly setted up environment.
 
+- Repository cloned
 - Correct credentials
 - Docker, Docker Compose installed
 - Correct data volumes set up
-- Repository cloned
 
 If you are missing any of those,
 see `DEV_DOC.md` for a full walkthrough.
