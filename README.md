@@ -38,6 +38,6 @@ The host network binds container ports directly to the host system, removing iso
 Docker bridge network creates a isolated network. Only Nginx is exposed to the outside. MariaDB and WordPress are hidden.
 
 ### Docker Volumes vs Bind Mounts
-Standard Docker volumes are stored in hidden system directories managed by Docker.  
-Pure bind mounts bypass Docker's volume management to directly link a host folder to a container.  
-In this project, I uses a hybrid approach: **Named Volumes stored locally**. The volumes are declared in Docker (using `driver: local`), but we use `driver_opts` (`type: none`, `o: bind`) to force the physical data storage to a specific host path (`/home/egache/data/`).
+Standard Docker volumes are stored and managed by Docker.  
+Pure bind mounts directly link a host folder to a container.  
+In this project, I used a hybrid approach: **Named Volumes stored locally**. The volumes are declared in Docker (using `driver: local`), but  `driver_opts` (`type: none`, `o: bind`) force the physical data storage to a specific host path (`/home/egache/data/`).
