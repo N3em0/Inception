@@ -1,0 +1,109 @@
+services:
+  nginx:
+    image: nginx
+    build: requirements/nginx
+    container_name: nginx
+    volumes:
+      - wp-data:/var/www/html
+    networks:
+      - wp-nginx
+    ports:
+      - "443:443"
+    env_file:
+      - ".env"
+    depends_on:
+      wordpress:
+        condition: service_healthy
+        restart: true
+    restart:
+      unless-stopped
+
+  wordpress:
+    image: wordpress
+    build: requirements/wordpress
+    container_name: wordpress
+    volumes:
+      - wp-data:/var/www/html
+    networks:
+      - db-wp
+      - wp-nginx
+    expose:
+      - "9000"
+    env_file:
+      - ".env"
+    environment:
+      DB_USER_PASSWORD_FILE: /run/secrets/db_user_password
+      WP_ADMIN_PASSWORD_FILE: /run/secrets/wp_admin_password
+      WP_USER_PASSWORD_FILE: /run/secrets/wp_user_password
+    secrets:
+      - db_user_password
+      - wp_admin_password
+      - wp_user_password
+    depends_on:
+      mariadb:
+        condition: service_healthy
+        restart: true
+    restart:
+      unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z 127.0.0.1 9000 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mariadb:
+    image: mariadb
+    build: requirements/mariadb
+    container_name: mariadb
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - db-wp
+    expose:
+      - "3306"
+    env_file:
+      - ".env"
+    environment:
+      DB_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      DB_USER_PASSWORD_FILE: /run/secrets/db_user_password
+    secrets:
+      - db_root_password
+      - db_user_password
+    restart:
+      unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  wp-data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/egache/data/wp-data
+  db-data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/egache/data/db-data
+
+networks:
+  db-wp:
+    driver: bridge
+    internal: true
+  wp-nginx:
+    driver: bridge
+
+secrets:
+  db_root_password:
+    file: ../secrets/db_root_password.txt
+  db_user_password:
+    file: ../secrets/db_user_password.txt
+  wp_admin_password:
+    file: ../secrets/wp_admin_password.txt
+  wp_user_password:
+    file: ../secrets/wp_user_password.txt
