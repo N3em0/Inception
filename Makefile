@@ -25,6 +25,7 @@ reset:
 	$(COMPOSE) down -v
 	docker system prune -a
 	sudo rm -rf $(WPDATA) $(DBDATA)
+	sudo rm -rf /home/egache/data
 
 re:
 	$(MAKE) reset
