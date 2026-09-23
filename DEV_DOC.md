@@ -32,8 +32,6 @@ Add this line to `/etc/hosts` file.
 127.0.0.1       egache.42.fr
 ```
 We need to link the url to localhost for our local Nginx and WordPress to handle the request.
-```
-```
 
 ### 3. Define .env variables
 
@@ -56,7 +54,6 @@ Those variables are used during containers setup scripts.
 ### 4. Define secrets variables
 
 Go to the root of the project and copy paste this command. Those are examples password. Change them at your will
-```bash
 ```bash
 mkdir secrets
 echo "root" > secrets/db_root_password.txt
